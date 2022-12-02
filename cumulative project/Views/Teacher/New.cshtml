@@ -22,28 +22,7 @@
             margin-top: 50px;
         }
 </style>
-<script>
-    window.onload = function () {
-        formHandle = document.forms.teacherform;
-        formHandle.onsubmit = processForm;
-        function processForm() {
-            var fname = formHandle.TeacherFname;
-            var lname = formHandle.TeacherLname;
-            var hiredate = formHandle.HireDate;
-            var salary = formHandle.Salary;
-            var Enumber = formHandle.EmployeeNumber;
 
-
-            if (fname == "") {
-                field = document.getElementById("teacherFname")
-                field.style.background = "red";
-                fname.focus();
-                return false;
-            }
-
-        }
-    }
-</script>
 <div id="welcomeForm">
     <nav>
         <a class="navlink" href="/Teacher/List">Back To Teacher</a>
@@ -53,32 +32,34 @@
 
     <form method="POST" action="/Teacher/Create" name="teacherform">
         <div class="inputrow">
-            <label>First name:</label>
-            <input type="text" id="TeacherFname" name="TeacherFname" />
+            <label for="TFname">First name:</label>
+            <input type="text" id="TFname" name="TeacherFname" placeholder="John" />
         </div>
 
         <div class="inputrow">
-            <label>Last name:</label>
-            <input type="text" id="TeacherLname" name="TeacherLname" />
+            <label for="TLname">Last name:</label>
+            <input type="text" id="TLname" name="TeacherLname" placeholder="Deo" />
         </div>
 
         <div class="inputrow">
-            <label>Hire Date:</label>
-            <input type="datetime" id="HireDate" name="HireDate" />
+            <label for="Hdate">Hire Date:</label>
+            <input type="datetime" id="Hdate" name="HireDate" placeholder="yyyy-mm-dd hh:mm:ss" />
         </div>
 
         <div class="inputrow">
-            <label>Salary:</label>
-            <input type="number" id="Salary" name="Salary" step="any" />
+            <label for="Spay">Salary:</label>
+            <input type="number" id="Spay" name="Salary" step="any" placeholder="33.00" />
         </div>
         <div class="inputrow">
-            <label>EmployeeNumber:</label>
-            <input type="text" id="EmployeeNumber" name="EmployeeNumber" />
+            <label for="Enumber">EmployeeNumber:</label>
+            <input type="text" id="Enumber" name="EmployeeNumber" placeholder="T505" />
         </div>
 
         <div class="inputrow">
             <input type="submit" value="Create Teacher" />
         </div>
+
     </form>
     
 </div>
+<script src="~/Scripts/school.js"></script>
