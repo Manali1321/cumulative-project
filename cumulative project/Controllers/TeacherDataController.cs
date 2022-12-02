@@ -138,23 +138,23 @@ namespace cumulative_project.Controllers
 
         }
         /// <summary>
-        /// 
+        /// Delete an Teacher from the connected Mysql database if the Id of the teacher exsists.
         /// </summary>
         /// <param name="id"></param>
         /// <example>POST: /api/TeacherData/DeleteTeacher/3</example>
         [HttpPost]
         public void DeleteTeacher(int id)
         {
-            //
+            //create an instance of a connection
             MySqlConnection conn = school.AccessDatabase();
 
-            //
+            //open the connection between server and database
             conn.Open();
 
-            //
+            //Establish a new command for our databse
             MySqlCommand cmd = conn.CreateCommand();
 
-            //
+            //sql query
             cmd.CommandText = "delete from teachers where teacherid=@id";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();

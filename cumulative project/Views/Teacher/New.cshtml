@@ -22,6 +22,28 @@
             margin-top: 50px;
         }
 </style>
+<script>
+    window.onload = function () {
+        formHandle = document.forms.teacherform;
+        formHandle.onsubmit = processForm;
+        function processForm() {
+            var fname = formHandle.TeacherFname;
+            var lname = formHandle.TeacherLname;
+            var hiredate = formHandle.HireDate;
+            var salary = formHandle.Salary;
+            var Enumber = formHandle.EmployeeNumber;
+
+
+            if (fname == "") {
+                field = document.getElementById("teacherFname")
+                field.style.background = "red";
+                fname.focus();
+                return false;
+            }
+
+        }
+    }
+</script>
 <div id="welcomeForm">
     <nav>
         <a class="navlink" href="/Teacher/List">Back To Teacher</a>
@@ -29,7 +51,7 @@
 
     <h2>New Teacher</h2>
 
-    <form method="POST" action="/Teacher/Create">
+    <form method="POST" action="/Teacher/Create" name="teacherform">
         <div class="inputrow">
             <label>First name:</label>
             <input type="text" id="TeacherFname" name="TeacherFname" />
@@ -58,4 +80,5 @@
             <input type="submit" value="Create Teacher" />
         </div>
     </form>
+    
 </div>
