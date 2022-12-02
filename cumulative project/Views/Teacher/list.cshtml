@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<cumulative_project.Models.Teacher>
+
 @{
     ViewBag.Title = "List";
 }
@@ -7,6 +8,10 @@
 <p>This page should be showing information about all Teachers</p>
 
 <div id="containerlist">
+    <nav>
+        <a class="navlink" href="/Teacher/New/">Add Teacher</a>
+
+    </nav>
     <h2>List of Teachers</h2>
     <form action="/Teacher/List" method="GET">
         <div>
