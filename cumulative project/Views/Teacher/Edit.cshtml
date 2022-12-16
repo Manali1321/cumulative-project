@@ -1,0 +1,36 @@
+﻿@model cumulative_project.Models.Teacher
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Teacher</h2>
+<form>
+    <div class="inputrow">
+        <label for="TFname">First name:</label>
+        <input type="text" id="TFname"  value="@Model.TeacherFname" name="TeacherFname" />
+    </div>
+
+    <div class="inputrow">
+        <label for="TLname">Last name:</label>
+        <input type="text" id="TLname" value="@Model.TeacherLname" name="TeacherLname"/>
+    </div>
+
+    <div class="inputrow">
+        <label for="Hdate">Hire Date:</label>
+        <input type="datetime" id="Hdate" value="@Model.HireDate" name="HireDate" />
+    </div>
+
+    <div class="inputrow">
+        <label for="Spay">Salary:</label>
+        <input type="number" id="Spay" value="@Model.Salary" name="Salary" step="any"/>
+    </div>
+    <div class="inputrow">
+        <label for="Enumber">EmployeeNumber:</label>
+        <input type="text" id="Enumber" value="@Model.EmployeeNumber" name="EmployeeNumber"/>
+    </div>
+
+    <div class="inputrow">
+        <input type="submit" value="update Teacher" />
+    </div>
+</form>

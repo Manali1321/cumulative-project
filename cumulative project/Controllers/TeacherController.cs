@@ -77,9 +77,49 @@ namespace cumulative_project.Controllers
 
 
         }
-    
-    
-    
+
+       //GET: /Teacher/Edit/{id}
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            TeacherDataController MyController = new TeacherDataController();
+            Teacher SelectedTeacher= MyController. FindTeacher(id);
+
+            return View(SelectedTeacher);
+
+        }
+        //POST:/ Teacher/Update/{id}
+        [HttpPost]
+        public ActionResult Update(int id, string TeacherFname, string TeacherLname, DateTime HireDate, decimal Salary, string EmployeeNumber)
+        {
+            Debug.WriteLine("got updated information");
+            Debug.WriteLine(TeacherFname);
+            Debug.WriteLine(TeacherLname);
+            Debug.WriteLine(HireDate);
+            Debug.WriteLine(Salary);
+            Debug.WriteLine(EmployeeNumber);
+
+
+
+
+            Teacher UpdatedTeacher= new Teacher();
+            UpdatedTeacher.TeacherId = id;
+            UpdatedTeacher.TeacherFname = TeacherFname;
+            UpdatedTeacher.TeacherLname = TeacherLname;
+            UpdatedTeacher.HireDate = HireDate;
+            UpdatedTeacher.Salary = Salary;
+            UpdatedTeacher.EmployeeNumber = EmployeeNumber;
+
+            TeacherDataController Controller = new TeacherDataController();
+            Controller.UpdateTeacher(id, UpdatedTeacher);
+
+            return RedirectToAction("Show/" + id);
+
+        }
+        
+
+
+
     }
 
 

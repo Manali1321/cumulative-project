@@ -2,7 +2,9 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
 
 namespace cumulative_project.Controllers
@@ -22,11 +24,11 @@ namespace cumulative_project.Controllers
         /// <returns>
         /// A List of Teachers (First name, last name)
         /// </returns>
-     
+
 
         [HttpGet]
         [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
-        public IEnumerable<Teacher>ListTeachers(string SearchKey=null)
+        public IEnumerable<Teacher> ListTeachers(string SearchKey = null)
         {
             //Create an instance of a connection
             MySqlConnection Conn = school.AccessDatabase();
@@ -39,15 +41,15 @@ namespace cumulative_project.Controllers
 
             //SQL Query
             cmd.CommandText = "select * from Teachers where lower(teacherfname) like lower(@key) or lower(teacherlname) like lower(@key) or lower(concat (teacherfname, ' ', teacherlname)) like lower(@key)";
-            
-            cmd.Parameters.AddWithValue("@key", "%" + SearchKey+ "%");
+
+            cmd.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
             cmd.Prepare();
 
             //Gather Result set of Query into a variable
-            MySqlDataReader ResultSet=cmd.ExecuteReader();
+            MySqlDataReader ResultSet = cmd.ExecuteReader();
 
             //Create a empty list of teachers
-            List<Teacher> Teachers = new List<Teacher> {};
+            List<Teacher> Teachers = new List<Teacher> { };
 
             //Loop Through Each Row the Result Set
             while (ResultSet.Read())
@@ -61,12 +63,12 @@ namespace cumulative_project.Controllers
                 decimal Salary = (decimal)ResultSet["salary"];
                 string EmployeeNumber = (string)ResultSet["employeenumber"];
 
-                Teacher NewTeacher=new Teacher();
+                Teacher NewTeacher = new Teacher();
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
                 NewTeacher.TeacherLname = TeacherLname;
                 NewTeacher.HireDate = HireDate;
-                NewTeacher.Salary= Salary;
+                NewTeacher.Salary = Salary;
                 NewTeacher.EmployeeNumber = EmployeeNumber;
 
                 //Add the teacher name to the list
@@ -91,8 +93,8 @@ namespace cumulative_project.Controllers
         /// </summary>
         /// <param name="id">The teacher primary key</param>
         /// <returns>a teacher project</returns>
-        
-        
+
+
         [HttpGet]
         public Teacher FindTeacher(int id)
         {
@@ -111,20 +113,20 @@ namespace cumulative_project.Controllers
             cmd.CommandText = "select * from Teachers where teacherid= " + id;
 
             //Gather Result set of query into a variable
-            MySqlDataReader ResultSet=cmd.ExecuteReader();
+            MySqlDataReader ResultSet = cmd.ExecuteReader();
 
-            while(ResultSet.Read())
+            while (ResultSet.Read())
             {
                 //Access column informarion by the DB column name as an index
                 int TeacherId = (int)ResultSet["teacherid"];
-                string TeacherFname =(string) ResultSet["teacherfname"];
+                string TeacherFname = (string)ResultSet["teacherfname"];
                 string TeacherLname = (string)ResultSet["teacherlname"];
                 DateTime HireDate = (DateTime)ResultSet["hiredate"];
                 decimal Salary = (decimal)ResultSet["salary"];
                 string EmployeeNumber = (string)ResultSet["employeenumber"];
 
 
-                NewTeacher.TeacherId=TeacherId;
+                NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
                 NewTeacher.TeacherLname = TeacherLname;
                 NewTeacher.HireDate = HireDate;
@@ -180,7 +182,7 @@ namespace cumulative_project.Controllers
         /// "EmployeeNumber": T202
         ///}
         /// </example>
-        //[HttpPost]
+        [HttpPost]
         //[EnableCors(origin: "*", methods: "*", headers: "*")]
         public void AddTeacher(Teacher NewTeacher)
         {
@@ -201,8 +203,48 @@ namespace cumulative_project.Controllers
             cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.TeacherLname);
             cmd.Parameters.AddWithValue("@HireDate", NewTeacher.HireDate);
             cmd.Parameters.AddWithValue("@Salary", NewTeacher.Salary);
-            cmd.Parameters.AddWithValue("@EmployeeNumber" , NewTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", NewTeacher.EmployeeNumber);
 
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+        ///<summary>
+        ///Update a Teacher in the system
+        ///<param name="TeacherId"> The id of the teacher in the system</param>
+        ///<param name="UpdatedTeacher">Post content, teacher body include name,date and salary</param>
+        ///</summary>
+        ///<example>
+        ///api/teacherdata/updateteacher/16
+        ///</example>
+        ///POST: POST CONTENT / FORM BODY/ REQUEST BODY
+
+        [HttpPost]
+        [Route("api/TeacherData/UpdateTeacher/{TeacherId}")]
+
+        public void UpdateTeacher(int TeacherId, [FromBody] Teacher UpdatedTeacher)
+        {
+            MySqlConnection Conn = school.AccessDatabase();
+           
+            Debug.WriteLine("updating teacher with an id of " + TeacherId);
+            Debug.WriteLine(UpdatedTeacher.TeacherId);
+            Debug.WriteLine(UpdatedTeacher.TeacherFname);
+            Debug.WriteLine(UpdatedTeacher.Salary);
+
+            
+            Conn.Open();
+            
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "upadate teacher set teacherfname=@TeacherFname, TeacherLname=@TeacherLname, HireDate=@HireDate, Salary=@salary, EmployeeNumber=@EmployeeNumber where teacherid=@id";
+            cmd.Parameters.AddWithValue("@TeacherId", UpdatedTeacher.TeacherId);
+            cmd.Parameters.AddWithValue("@TeacherFname", UpdatedTeacher.TeacherFname);
+            cmd.Parameters.AddWithValue("@TeacherLname", UpdatedTeacher.TeacherLname);
+            cmd.Parameters.AddWithValue("@HireDate", UpdatedTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", UpdatedTeacher.EmployeeNumber);
             cmd.Prepare();
 
             cmd.ExecuteNonQuery();
@@ -212,5 +254,7 @@ namespace cumulative_project.Controllers
 
 
         }
+
     }
 }
+

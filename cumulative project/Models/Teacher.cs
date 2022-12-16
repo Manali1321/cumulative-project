@@ -14,5 +14,9 @@ namespace cumulative_project.Models
         public DateTime HireDate;
         public decimal Salary;
         public string EmployeeNumber;
+
+        //parameter-less constructor function
+        public Teacher() { }
+
     }
 }
